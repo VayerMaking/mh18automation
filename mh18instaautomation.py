@@ -50,10 +50,7 @@ while True :
     print("text:",texts)
 
     time.sleep(5)
-    if os.path.exists("myimg.jpg.REMOVE_ME"):
-      os.remove("myimg.jpg.REMOVE_ME")
-    else:
-      print("The file does not exist")
+  
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
@@ -67,5 +64,9 @@ while True :
         bot.upload_photo("myimg.jpg",caption)
         #print(latest_title + texts + latest_link )
         current_link = latest_link
+        if os.path.exists("myimg.jpg.REMOVE_ME"):
+            os.remove("myimg.jpg.REMOVE_ME")
+        else:
+            print("The file does not exist")
 
     time.sleep(1200)
