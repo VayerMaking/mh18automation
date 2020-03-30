@@ -15,7 +15,7 @@ current_link = 0
 def send( message ):
 
     # your webhook URL
-    webhookurl = "https://discordapp.com/api/webhooks/693879196144893952/EdzQjpp_95nAGlMA-UGrep9bdivgT0bpM0sieySdjed08j60SwN7Z7Nu1r04_qZzUMaQ"
+    webhookurl = """"discord webhook url""""
 
     # compile the form data (BOUNDARY can be anything)
     formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
