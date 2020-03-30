@@ -32,8 +32,9 @@ while True :
     soup_img = BeautifulSoup(post_page, 'html.parser')
     imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("^alignright wp-image-"),re.compile("^aligncenter size-medium wp-image-"),re.compile("^alignleft size-thumbnail wp-image"),re.compile("^alignright size-thumbnail wp-image-")]},limit=1)
     for div in imgs:
-        latest_image = div['src']
-        print("img:",latest_image)
+        if (div['src']):
+            latest_image = div['src']
+            print("img:",latest_image)
 
     urllib.request.urlretrieve(latest_image, "myimg.jpg")
 
