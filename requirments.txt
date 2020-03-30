@@ -1,4 +1,0 @@
-pandas
-beautifulsoup
-bs4
-instabot
