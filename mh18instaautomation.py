@@ -7,8 +7,32 @@ import os
 import time
 from instabot import Bot
 from datetime import datetime
+import http.client
+import sys
 
 current_link = 0
+
+def send( message ):
+
+    # your webhook URL
+    webhookurl = "https://discordapp.com/api/webhooks/693879196144893952/EdzQjpp_95nAGlMA-UGrep9bdivgT0bpM0sieySdjed08j60SwN7Z7Nu1r04_qZzUMaQ"
+
+    # compile the form data (BOUNDARY can be anything)
+    formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
+
+    # get the connection and make the request
+    connection = http.client.HTTPSConnection("discordapp.com")
+    connection.request("POST", webhookurl, formdata, {
+        'content-type': "multipart/form-data; boundary=----:::BOUNDARY:::",
+        'cache-control': "no-cache",
+        })
+
+    # get the response
+    response = connection.getresponse()
+    result = response.read()
+
+    # return back to the calling function with the result
+    return result.decode("utf-8")
 
 while True :
 
@@ -31,12 +55,20 @@ while True :
 
     soup_img = BeautifulSoup(post_page, 'html.parser')
     imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("^alignright wp-image-"),re.compile("^aligncenter size-medium wp-image-"),re.compile("^alignleft size-thumbnail wp-image"),re.compile("^alignright size-thumbnail wp-image-")]},limit=1)
-    for div in imgs:
-        if (div['src']):
+    if not imgs:
+        for div in imgs:
             latest_image = div['src']
             print("img:",latest_image)
+            urllib.request.urlretrieve(latest_image, "myimg.jpg")
+    else:
+            soup_img = BeautifulSoup(page, 'html.parser')
+            imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("attachment-post-thumbnail size-post-thumbnail wp-post-image")]},limit=1)
+            for div in imgs:
+                latest_image = div['src']
+                print("img:",latest_image)
+                urllib.request.urlretrieve(latest_image, "myimg.jpg")
 
-    urllib.request.urlretrieve(latest_image, "myimg.jpg")
+
 
     soup_title = BeautifulSoup(page, 'html.parser')
     titles = soup_title.find_all('h2',attrs={'class' :  'title'},limit=1)
@@ -51,23 +83,29 @@ while True :
     print("text:",texts)
 
     time.sleep(5)
-  
+
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
 
 
-    while current_link != latest_link:
+    while current_link != latest_link and latest_image!=0:
+        print( send( "<@&roleid>" + "a new post has been uploaded to instagram via your script") )
         bot = Bot()
         print("shu se ka4va v ig")
         bot.login(username = """"your instagram username"""",password = """"your instagram password"""")
         caption = latest_title + "\n\n" + texts + latest_link
         bot.upload_photo("myimg.jpg",caption)
         #print(latest_title + texts + latest_link )
-        current_link = latest_link
-        if os.path.exists("myimg.jpg.REMOVE_ME"):
-            os.remove("myimg.jpg.REMOVE_ME")
-        else:
-            print("The file does not exist")
 
+        if os.path.exists("myimg.jpg.REMOVE_ME"):
+          os.remove("myimg.jpg.REMOVE_ME")
+        else:
+          print("The file does not exist")
+        current_link = latest_link
+
+    if os.path.exists("myimg.jpg.REMOVE_ME"):
+        os.remove("myimg.jpg.REMOVE_ME")
+    else:
+        print("The file does not exist")
     time.sleep(1200)
