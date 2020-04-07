@@ -10,12 +10,17 @@ from datetime import datetime
 import http.client
 import sys
 
+
+
 current_link = 0
+latest_image = 0
+bot = Bot()
+bot.login(username = "'''instagram username'''",password = "'''instagram password'''")
 
 def send( message ):
 
     # your webhook URL
-    webhookurl = """"discord webhook url""""
+    webhookurl = "'''discord_webhook_url'''"
 
     # compile the form data (BOUNDARY can be anything)
     formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
@@ -54,7 +59,7 @@ while True :
     post_page = r1.content
 
     soup_img = BeautifulSoup(post_page, 'html.parser')
-    imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("^alignright wp-image-"),re.compile("^aligncenter size-medium wp-image-"),re.compile("^alignleft size-thumbnail wp-image"),re.compile("^alignright size-thumbnail wp-image-")]},limit=1)
+    imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("^alignright wp-image-"),re.compile("^aligncenter size-medium wp-image-"),re.compile("^alignleft size-thumbnail wp-image"),re.compile("^alignright size-thumbnail wp-image-"),re.compile("^size-medium wp-image-20")]},limit=1)
     if not imgs:
         for div in imgs:
             latest_image = div['src']
@@ -65,8 +70,10 @@ while True :
             imgs = soup_img.find_all('img',attrs={'class' :  [re.compile("attachment-post-thumbnail size-post-thumbnail wp-post-image")]},limit=1)
             for div in imgs:
                 latest_image = div['src']
+                latest_image = latest_image.replace("120x120","500x500")
                 print("img:",latest_image)
-                urllib.request.urlretrieve(latest_image, "myimg.jpg")
+                myfile = requests.get(latest_image)
+                open('myimg.jpg', 'wb').write(myfile.content)
 
 
 
@@ -78,34 +85,29 @@ while True :
         latest_title = temp_title
         print("title:",latest_title)
 
+
     soup_text = BeautifulSoup(page, 'html.parser')
     texts = soup_text.find('div',attrs={'class' :  'post-content clear-block'}).getText()
     print("text:",texts)
-
-    time.sleep(5)
+    time.sleep(1200)
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
 
+    if(latest_image == 0):
+        time.sleep(5)
+        print("going to sleep")
 
     while current_link != latest_link and latest_image!=0:
-        print( send( "<@&roleid>" + "a new post has been uploaded to instagram via your script") )
-        bot = Bot()
+        print( send( "<@&'''discord_id'''>" + " a new post has been uploaded to instagram via your script") )
         print("shu se ka4va v ig")
-        bot.login(username = """"your instagram username"""",password = """"your instagram password"""")
-        caption = latest_title + "\n\n" + texts + latest_link
-        bot.upload_photo("myimg.jpg",caption)
-        #print(latest_title + texts + latest_link )
-
-        if os.path.exists("myimg.jpg.REMOVE_ME"):
-          os.remove("myimg.jpg.REMOVE_ME")
-        else:
-          print("The file does not exist")
-        current_link = latest_link
-
-    if os.path.exists("myimg.jpg.REMOVE_ME"):
-        os.remove("myimg.jpg.REMOVE_ME")
-    else:
-        print("The file does not exist")
-    time.sleep(1200)
+        caption = latest_title + "\n\n" + texts + "За повече информация и пълния пост посетете сайта ни metalhangar18.com или цъкнете линка в профила ни!"
+        try:
+            bot.upload_photo("myimg.jpg",caption)
+        except:
+            pass
+        
+        current_link = latest_link;
+        time.sleep(12)
+        break
