@@ -1,5 +1,6 @@
 config.py
 config/
+config/log/
 myimg.jpg
 myimg.jpg.REMOVE_ME
 __pycache__/
