@@ -11,8 +11,6 @@ import http.client
 import sys
 import config
 
-
-
 current_link = 0
 latest_image = 0
 bot = Bot()
@@ -53,7 +51,6 @@ while True :
         latest_link = div.a['href']
         print("link:",latest_link)
 
-
     post_url = latest_link
     r1 = requests.get(post_url)
     r1.status_code
@@ -76,8 +73,6 @@ while True :
                 myfile = requests.get(latest_image)
                 open('myimg.jpg', 'wb').write(myfile.content)
 
-
-
     soup_title = BeautifulSoup(page, 'html.parser')
     titles = soup_title.find_all('h2',attrs={'class' :  'title'},limit=1)
     for div in titles:
@@ -91,8 +86,6 @@ while True :
     texts = soup_text.find('div',attrs={'class' :  'post-content clear-block'}).getText()
     print("text:",texts)
     time.sleep(1200)
-
-
 
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
