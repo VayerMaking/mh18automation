@@ -16,3 +16,5 @@
 2020-08-08 16:18:36,788 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: media/configure/? returned response: <Response [200]>
 2020-08-08 16:18:36,975 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: qe/expose/ returned response: <Response [200]>
 2020-08-08 16:18:36,975 - instabot version: 0.117.0 (bot_photo) - INFO - Photo 'myimg.jpg' is uploaded.
+2020-08-08 16:21:40,308 - instabot version: 0.117.0 (bot_checkpoint) - DEBUG - Saving Checkpoint file to: /home/vayermaking/github/mh18automation/config/metalhangar18.checkpoint
+2020-08-08 16:21:40,309 - instabot version: 0.117.0 (bot) - INFO - Total requests: 33
