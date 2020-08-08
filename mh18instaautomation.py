@@ -9,18 +9,19 @@ from instabot import Bot
 from datetime import datetime
 import http.client
 import sys
+import config
 
 
 
 current_link = 0
 latest_image = 0
 bot = Bot()
-bot.login(username = "'''instagram username'''",password = "'''instagram password'''")
+bot.login(username = mh18instapostconfig.username, password = mh18instapostconfig.password)
 
 def send( message ):
 
     # your webhook URL
-    webhookurl = "'''discord_webhook_url'''"
+    webhookurl = mh18instapostconfig.webhook
 
     # compile the form data (BOUNDARY can be anything)
     formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
@@ -91,6 +92,8 @@ while True :
     print("text:",texts)
     time.sleep(1200)
 
+
+
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     print("Current Time =", current_time)
@@ -100,14 +103,16 @@ while True :
         print("going to sleep")
 
     while current_link != latest_link and latest_image!=0:
-        print( send( "<@&'''discord_id'''>" + " a new post has been uploaded to instagram via your script") )
+
         print("shu se ka4va v ig")
         caption = latest_title + "\n\n" + texts + "За повече информация и пълния пост посетете сайта ни metalhangar18.com или цъкнете линка в профила ни!"
         try:
             bot.upload_photo("myimg.jpg",caption)
+            print( send( "<@&693878676785463297>" + " a new post has been uploaded to instagram via your script") )
         except:
             pass
-        
+
         current_link = latest_link;
+
         time.sleep(12)
         break
