@@ -2,3 +2,4 @@ config.py
 config/
 myimg.jpg
 myimg.jpg.REMOVE_ME
+__pycache__/
