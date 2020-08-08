@@ -14,12 +14,12 @@ import config
 current_link = 0
 latest_image = 0
 bot = Bot()
-bot.login(username = mh18instapostconfig.username, password = mh18instapostconfig.password)
+bot.login(username = config.username, password = config.password)
 
 def send( message ):
 
     # your webhook URL
-    webhookurl = mh18instapostconfig.webhook
+    webhookurl = config.webhookurl
 
     # compile the form data (BOUNDARY can be anything)
     formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
