@@ -10,33 +10,23 @@ from datetime import datetime
 import http.client
 import sys
 import config
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 current_link = 0
 latest_image = 0
 bot = Bot()
 bot.login(username = config.username, password = config.password)
 
-def send( message ):
+def send(image_url):
+    webhook = DiscordWebhook(url=config.webhookurl)
+    # create embed object for webhook
+    embed = DiscordEmbed(title="MH18 insta", description="new post", color=242424)
 
-    # your webhook URL
-    webhookurl = config.webhookurl
+    # add embed object to webhook
+    webhook.add_embed(embed)
+    embed.set_image(url=image_url)
+    response = webhook.execute()
 
-    # compile the form data (BOUNDARY can be anything)
-    formdata = "------:::BOUNDARY:::\r\nContent-Disposition: form-data; name=\"content\"\r\n\r\n" + message + "\r\n------:::BOUNDARY:::--"
-
-    # get the connection and make the request
-    connection = http.client.HTTPSConnection("discordapp.com")
-    connection.request("POST", webhookurl, formdata, {
-        'content-type': "multipart/form-data; boundary=----:::BOUNDARY:::",
-        'cache-control': "no-cache",
-        })
-
-    # get the response
-    response = connection.getresponse()
-    result = response.read()
-
-    # return back to the calling function with the result
-    return result.decode("utf-8")
 
 while True :
 
@@ -100,8 +90,8 @@ while True :
         print("shu se ka4va v ig")
         caption = latest_title + "\n\n" + texts + "За повече информация и пълния пост посетете сайта ни metalhangar18.com или цъкнете линка в профила ни!"
         try:
-            bot.upload_photo("myimg.jpg",caption)
-            print( send( "<@&693878676785463297>" + " a new post has been uploaded to instagram via your script") )
+            bot.upload_photo("myimg.jpg", caption)
+            send(latest_image)
         except:
             pass
 
