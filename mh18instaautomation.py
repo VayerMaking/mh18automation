@@ -14,6 +14,8 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 
 current_link = 0
 latest_image = 0
+latest_link = "https://metalhangar18.com/site/category/news"
+
 bot = Bot()
 bot.login(username = config.username, password = config.password)
 
