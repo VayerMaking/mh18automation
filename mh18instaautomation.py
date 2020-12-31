@@ -10,25 +10,23 @@ from datetime import datetime
 import http.client
 import sys
 import config
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 current_link = 0
 latest_image = 0
-latest_link = "https://metalhangar18.com/site/category/news"
-
+#it needs a base url because its undeclared
+latest_link = "http://google.com"
 bot = Bot()
 bot.login(username = config.username, password = config.password)
 
 def send(image_url):
     webhook = DiscordWebhook(url=config.webhookurl)
     # create embed object for webhook
-    embed = DiscordEmbed(title="MH18 insta", description="new post", color=242424)
+    embed = DiscordEmbed(title="MH18 insta", description="<@&693878676785463297>" + " a new post has been uploaded to instagram via your script", color=242424)
 
     # add embed object to webhook
     webhook.add_embed(embed)
     embed.set_image(url=image_url)
     response = webhook.execute()
-
 
 while True :
 
@@ -38,7 +36,8 @@ while True :
     page = r1.content
 
     soup_link = BeautifulSoup(page, 'html.parser')
-    links = soup_link.find_all('div',attrs={'id' : re.compile("^post-20")},limit=1)
+
+    links = soup_link.find_all('div',attrs={'id' : re.compile("^post-21")},limit=1)
     for div in links:
         latest_link = div.a['href']
         print("link:",latest_link)
@@ -92,7 +91,7 @@ while True :
         print("shu se ka4va v ig")
         caption = latest_title + "\n\n" + texts + "За повече информация и пълния пост посетете сайта ни metalhangar18.com или цъкнете линка в профила ни!"
         try:
-            bot.upload_photo("myimg.jpg", caption)
+            bot.upload_photo("myimg.jpg",caption)
             send(latest_image)
         except:
             pass
